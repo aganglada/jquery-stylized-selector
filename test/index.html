@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery stylized selector test</title>
+    <style type="text/css">
+        body{margin: 30px;}
+        select{display: none;visibility: hidden}
+        .select{color: #ccc;display: inline-block;vertical-align: top;margin-right: 20px;}
+        .options{display: none;list-style: none;margin: 0;padding: 0;border: 1px solid #ccc;border-top: none; width: 230px;}
+        .options > li{padding: 8px;}
+        .options > li:hover{background-color: #ccc; color: white;cursor: pointer}
+        .options > li.selected{background-color: #ccc; color: white;cursor: pointer}
+        .styled-select{display: inline-block;border: 1px solid #CCC;padding: 8px 15px;cursor: pointer;width: 200px;}
+        .arrow{width: 0;height: 0;border-left: 8px solid rgba(0, 0, 0, 0);border-right: 8px solid rgba(0, 0, 0, 0);border-top: 8px solid #CCC;vertical-align: middle;float: right;margin-top: 6px;margin-left: 7px;}
+
+    </style>
+</head>
+<body>
+    <!-- magic select tag -->
+    <select name="testing" id="testing">
+        <option value="">Select one</option>
+        <option value="1">nodejs</option>
+        <option value="2">backbone</option>
+        <option value="3">angularjs</option>
+        <option value="4">emberjs</option>
+        <option value="5">meteorjs</option>
+    </select>
+    <select name="testing2" id="testing2">
+        <option value="">Select one</option>
+        <option value="1">nodejs</option>
+        <option value="2">backbone</option>
+        <option value="3">angularjs</option>
+        <option value="4">emberjs</option>
+        <option value="5">meteorjs</option>
+    </select>
+    <!-- jQuery library from cdn -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- stylized selector library -->
+    <script src="../src/jquery.stylized-selector.js"></script>
+    <!-- Initialization -->
+    <script type="text/javascript">
+        $(function()
+        {
+           $('select').stylizedSelector({
+               arrowIconClass: 'arrow'
+           });
+        });
+    </script>
+</body>
+</html>
