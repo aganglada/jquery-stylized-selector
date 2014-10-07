@@ -3,7 +3,7 @@
  * -----------------------------
  * @author aganglada
  * @since 06/01/2014
- * @link https://github.com/aganglada/jquery-stylized-selector
+ * @link https://github.com/aganglada/stylized-selector
  * @version 1.0
  *
  */
@@ -12,10 +12,13 @@
 {
     $.fn.stylizedSelector = function(options)
     {
+            // select data-id
         var selectCount = 0,
 
+            // keyboard utilities
             UP = 38, DOWN = 40, SPACE = 32, RETURN = 13, TAB = 9, ESC = 27, DELETE = 8,
 
+            // to be used on search
             timer = undefined,
 
             defaults = {
@@ -38,6 +41,11 @@
                 options
             ),
 
+            /**
+             * saving data on selector.
+             * to be used later :)
+             * @param $selector
+             */
             updateDataSelector = function($selector)
             {
                 $selector.data( {
@@ -48,11 +56,22 @@
                 });
             },
 
+            /**
+             * general method to get a data(index).
+             * @param $selector
+             * @param index
+             * @returns {*}
+             */
             dataSelector = function($selector, index)
             {
                 return $selector.data(index);
             },
 
+            /**
+             * initializing selector,
+             * building structure to wrap it.
+             * @param $selector
+             */
             buildSelector = function($selector)
             {
                 var isMultipleClass = dataSelector($selector, 'isMultiple') ? ' ' + settings.isMultipleClass : '';
@@ -62,6 +81,7 @@
                     .wrap('<div data-id="' + selectCount + '" class="' + settings.wrapperClass + isMultipleClass + '"></div>');
 
 
+                // if is not a multiple select
                 if (!dataSelector($selector, 'isMultiple'))
                 {
                     $selector.after('<div class="' + settings.styledSelectorClass + '">' +
@@ -76,8 +96,13 @@
                         $styledSelect.append('<i class="' + settings.arrowIconClass + '"></i>');
                     }
                 }
+                // TODO feature: multiple select support
             },
 
+            /**
+             * set initial value.
+             * @param $selector
+             */
             setSelectedOption = function($selector)
             {
                 updateDataSelector($selector);
@@ -89,6 +114,10 @@
                 $currentOption.html($selectedOption.text());
             },
 
+            /**
+             * building options in selector list.
+             * @param $selector
+             */
             updateSelect = function($selector)
             {
                 updateDataSelector($selector);
@@ -110,6 +139,10 @@
                 }
             },
 
+            /**
+             * onClick selector.
+             * @param event
+             */
             toggleOpen = function(event)
             {
                 event.stopPropagation();
@@ -127,6 +160,9 @@
                 }
             },
 
+            /**
+             * triggered on toggleOpen method.
+             */
             closeAll = function()
             {
                 var $styledSelectors = $('.' + settings.styledSelectorClass),
@@ -136,11 +172,20 @@
                 $('ul', $selectorWrapper).hide();
             },
 
+            /**
+             * on optionList click.
+             * @param event
+             */
             selectListItem = function(event)
             {
                 selectItem(event, $(event.target).closest('li'));
             },
 
+            /**
+             *
+             * @param event
+             * @param $_optionClicked
+             */
             selectItem = function(event, $_optionClicked)
             {
                 event.stopPropagation();
@@ -165,6 +210,10 @@
                 }
             },
 
+            /**
+             * this is what's happen always when a selector is clicked (open).
+             * @param event
+             */
             onDefaultOpen = function(event)
             {
                 var target = event.target,
@@ -176,11 +225,20 @@
                 settings.onOpen.call(this);
             },
 
+            /**
+             * on open we go to the centered position of the selected value.
+             * @param $list
+             * @param $current
+             */
             reloadSelectedPosition = function($list, $current)
             {
                 $list.scrollTop($list.scrollTop() + $current.position().top - $list.height()/2 + $current.height()/2);
             },
 
+            /**
+             * onKeyPress (if select is open)
+             * @param event
+             */
             selectKeyPress = function(event)
             {
                 var $currentOpenSelector = $('.' + settings.styledSelectorClass + '.' + settings.openSelectorClass),
@@ -265,6 +323,9 @@
                 $selector.data('timer', timer);
             },
 
+            /**
+             * 3 sec. to clear out the search data.
+             */
             callClearTimeout = function()
             {
                 var $currentOpenSelector = $('.' + settings.styledSelectorClass + '.' + settings.openSelectorClass),
@@ -273,6 +334,12 @@
                 clearKeyStrokes($selector);
             },
 
+            /**
+             * looking for a match in the options,
+             * if the select is open.
+             * @param event
+             * @param $currentOpenSelector
+             */
             checkForMatch = function(event, $currentOpenSelector)
             {
                 var $openSelectorWrapper = $currentOpenSelector.parent(),
@@ -293,6 +360,10 @@
                 });
             },
 
+            /**
+             * reset search
+             * @param $selector
+             */
             clearKeyStrokes = function($selector)
             {
                 $selector.data('matchString', '');
@@ -305,7 +376,6 @@
          * Add a handler to manage the original select
          *
          */
-
         this.each(function()
         {
             var $selector = $(this);
