@@ -22,18 +22,18 @@
             timer = undefined,
 
             defaults = {
-                hiddenClass: 	      'hidden',
-                wrapperClass: 			'select',
-                styledSelectorClass:'styled-select',
-                optionsClass: 			'options',
-                openSelectorClass:  'open',
-                activeOptionClass:  'selected',
-                currentTextClass: 	'current',
-                isMultipleClass: 		'multiple',
-                arrowIconClass: 		false,
-                onKeyDownTimeout:   2000,
-                onOpen: 				    function(){},
-                onChange: 				  function(){}
+                hiddenClass         : 'hidden',
+                wrapperClass        : 'select',
+                styledSelectorClass : 'styled-select',
+                optionsClass        : 'options',
+                openSelectorClass   : 'open',
+                activeOptionClass   : 'selected',
+                currentTextClass    : 'current',
+                isMultipleClass     : 'multiple',
+                arrowIconClass      : false,
+                onKeyDownTimeout    : 2000,
+                onOpen              : function(){},
+                onChange            : function(){}
             },
 
             settings = $.extend(
