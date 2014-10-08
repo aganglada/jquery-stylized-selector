@@ -22,18 +22,18 @@
             timer = undefined,
 
             defaults = {
-                hiddenClass: 	        'hidden',
+                hiddenClass: 	      'hidden',
                 wrapperClass: 			'select',
-                styledSelectorClass: 	'styled-select',
+                styledSelectorClass:'styled-select',
                 optionsClass: 			'options',
-                openSelectorClass: 		'open',
-                activeOptionClass: 		'selected',
-                currentTextClass: 		'current',
+                openSelectorClass:  'open',
+                activeOptionClass:  'selected',
+                currentTextClass: 	'current',
                 isMultipleClass: 		'multiple',
                 arrowIconClass: 		false,
-                onKeyDownTimeout:       2000,
-                onOpen: 				function(){},
-                onChange: 				function(){}
+                onKeyDownTimeout:   2000,
+                onOpen: 				    function(){},
+                onChange: 				  function(){}
             },
 
             settings = $.extend(
@@ -49,7 +49,7 @@
              */
             updateDataSelector = function($selector)
             {
-                $selector.data( {
+                $selector.data({
                     'isMultiple':       $selector.attr('multiple') !== undefined,
                     'styledSelect':     $selector.next('div.' + settings.styledSelectorClass),
                     'optionList':       $selector.children(),
@@ -133,9 +133,9 @@
                 for (var i = 0; i < dataSelector($selector, 'optionList').length; i++)
                 {
                     $('<li />', {
-                        text: $selector.children('option').eq(i).text(),
-                        rel: $selector.children('option').eq(i).val(),
-                        'class': $selectedOption[0] && $selectedOption[0].index == i ? settings.activeOptionClass : ''
+                        text    : $selector.children('option').eq(i).text(),
+                        rel     : $selector.children('option').eq(i).val(),
+                        'class' : $selectedOption[0] && $selectedOption[0].index == i ? settings.activeOptionClass : ''
                     }).appendTo($list);
                 }
             },
@@ -148,9 +148,9 @@
             {
                 event.stopPropagation();
 
-                var $styledSelect = $(event.target).closest('.' + settings.styledSelectorClass),
-                    $selectorWrapper = $styledSelect.parent(),
-                    selectorIsOpen = $styledSelect.is('.' + settings.openSelectorClass);
+                var $styledSelect     = $(event.target).closest('.' + settings.styledSelectorClass),
+                    $selectorWrapper  = $styledSelect.parent(),
+                    selectorIsOpen    = $styledSelect.is('.' + settings.openSelectorClass);
 
                 closeAll();
 
@@ -191,10 +191,10 @@
             {
                 event.stopPropagation();
 
-                var $selectorWrapper = $_optionClicked.closest('.' + settings.wrapperClass),
-                    $currentOption = $selectorWrapper.find('.' + settings.currentTextClass),
-                    $list = $selectorWrapper.find('ul'),
-                    $selector = $selectorWrapper.find('select');
+                var $selectorWrapper  = $_optionClicked.closest('.' + settings.wrapperClass),
+                    $currentOption    = $selectorWrapper.find('.' + settings.currentTextClass),
+                    $list             = $selectorWrapper.find('ul'),
+                    $selector         = $selectorWrapper.find('select');
 
                 $currentOption.text($_optionClicked.text());
                 $list.children('li').removeClass(settings.activeOptionClass);
@@ -217,10 +217,10 @@
              */
             onDefaultOpen = function(event)
             {
-                var target = event.target,
-                    $selectorWrapper = $(target).parent(),
-                    $list = $selectorWrapper.find('ul'),
-                    $selectedOption = $list.children('li').filter('.' + settings.activeOptionClass);
+                var target            = event.target,
+                    $selectorWrapper  = $(target).parent(),
+                    $list             = $selectorWrapper.find('ul'),
+                    $selectedOption   = $list.children('li').filter('.' + settings.activeOptionClass);
 
                 reloadSelectedPosition($list, $selectedOption);
                 settings.onOpen.call(this);
@@ -254,8 +254,8 @@
 
                 // keyboard conditions
                 var currentKeyCode = event.keyCode,
-                    keyboard = event.keyCode >= 48 && event.keyCode <= 90,
-                    numeric  = event.keyCode >= 96 && event.keyCode <= 105;
+                    keyboard       = event.keyCode >= 48 && event.keyCode <= 90,
+                    numeric        = event.keyCode >= 96 && event.keyCode <= 105;
 
                 if ($currentOpenSelector.length > 0)
                 {
@@ -270,13 +270,13 @@
 
                 if (
                     currentKeyCode == RETURN
-                        ||
-                        currentKeyCode == SPACE
-                        ||
-                        currentKeyCode == TAB
-                        ||
-                        currentKeyCode == ESC
-                    )
+                    ||
+                    currentKeyCode == SPACE
+                    ||
+                    currentKeyCode == TAB
+                    ||
+                    currentKeyCode == ESC
+                  )
                 {
                     $current.trigger('click');
                     return;
@@ -321,6 +321,7 @@
                         'matchString',
                         matchString
                     );
+
                     checkForMatch(event, $currentOpenSelector);
                 }
 
@@ -344,8 +345,8 @@
              */
             callClearTimeout = function()
             {
-                var $currentOpenSelector = $('.' + settings.styledSelectorClass + '.' + settings.openSelectorClass),
-                    $selector = $('select', $currentOpenSelector.parent());
+                var $currentOpenSelector  = $('.' + settings.styledSelectorClass + '.' + settings.openSelectorClass),
+                    $selector             = $('select', $currentOpenSelector.parent());
 
                 clearKeyStrokes($selector);
             },
