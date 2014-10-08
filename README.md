@@ -62,6 +62,7 @@ Super easy!
 | currentTextClass      | current       | class         | css class       |
 | isMultipleClass       | multiple      | class         | css class       |
 | arrowIconClass        | false         | mixed         | false/css class |
+| onKeyDownTimeout      | 2000          | milliseconds  | number          |
 | onOpen                | function(){}  | callback      | function        |
 | onChange              | function(){}  | callback      | function        |
 
@@ -70,7 +71,9 @@ Super easy!
 - Normal select features
 - Moving through options with keyboard
 - Search through options with keyboard
-- Pull request are accepted :)
+- Pull requests are accepted :)
+
+Check [issues known](https://github.com/aganglada/stylized-selector/issues)!
 
 ## Result
 
