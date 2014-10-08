@@ -31,6 +31,7 @@
                 currentTextClass: 		'current',
                 isMultipleClass: 		'multiple',
                 arrowIconClass: 		false,
+                onKeyDownTimeout:       2000,
                 onOpen: 				function(){},
                 onChange: 				function(){}
             },
@@ -241,14 +242,15 @@
              */
             selectKeyPress = function(event)
             {
-                var $currentOpenSelector = $('.' + settings.styledSelectorClass + '.' + settings.openSelectorClass),
+                var $currentOpenSelector    = $('.' + settings.styledSelectorClass + '.' + settings.openSelectorClass),
                     $currentWrapperSelector = $currentOpenSelector.parent(),
-                    $selector = $('select', $currentWrapperSelector),
-                    $list = $('ul', $currentWrapperSelector),
-                    $current = $('li.' + settings.activeOptionClass, $list),
-                    $currentPrev = $current.prev(),
-                    $currentNext = $current.next(),
-                    matchString = '';
+                    $selector               = $('select', $currentWrapperSelector),
+                    $list                   = $('ul', $currentWrapperSelector),
+                    $current                = $('li.' + settings.activeOptionClass, $list),
+                    $currentPrev            = $current.prev(),
+                    $currentNext            = $current.next(),
+                    matchString             = '',
+                    count                   = $selector.data('count') || 0;
 
                 // keyboard conditions
                 var currentKeyCode = event.keyCode,
@@ -300,7 +302,21 @@
                 else if (keyboard || numeric)
                 {
                     currentKeyCode = numeric ? currentKeyCode -48 : currentKeyCode;
-                    matchString = matchString + String.fromCharCode(currentKeyCode).toLowerCase();
+
+                    var string = String.fromCharCode(currentKeyCode).toLowerCase();
+
+                    // #1
+                    if (string != matchString)
+                    {
+                        matchString = matchString + String.fromCharCode(currentKeyCode).toLowerCase();
+                        $selector.data('count', 0);
+                    }
+                    else
+                    {
+                        matchString = string;
+                        $selector.data('count', count+1);
+                    }
+
                     $selector.data(
                         'matchString',
                         matchString
@@ -317,7 +333,7 @@
 
                 timer = setTimeout(
                     callClearTimeout,
-                    3000
+                    settings.onKeyDownTimeout
                 );
 
                 $selector.data('timer', timer);
@@ -343,21 +359,38 @@
             checkForMatch = function(event, $currentOpenSelector)
             {
                 var $openSelectorWrapper = $currentOpenSelector.parent(),
-                    $list = $('ul', $openSelectorWrapper),
-                    matchString = $('select', $openSelectorWrapper).data('matchString');
+                    $selector            = $('select', $openSelectorWrapper),
+                    $list                = $('ul', $openSelectorWrapper),
+                    matchString          = $('select', $openSelectorWrapper).data('matchString'),
+                    matchesElements      = [],
+                    $selectedOption      = undefined,
+                    count                = $selector.data('count');
 
                 $('li', $list).each(function(key, element)
                 {
                     var text = $(element).text().toLowerCase().trim();
 
-                    if (text.indexOf(matchString) >= 0)
+                    if (text.indexOf(matchString) == 0)
                     {
-                        var $selectedOption = $(this);
-                        selectItem(event, $selectedOption);
-                        reloadSelectedPosition($list, $selectedOption);
-                        return false;
+                        $selectedOption = $(this);
+                        matchesElements.push($selectedOption);
                     }
                 });
+
+                if (count >= matchesElements.length)
+                {
+                    $selector.data('count', 0);
+                    count = 0;
+                }
+
+                $selectedOption = matchesElements[count];
+
+                if ($selectedOption !== undefined)
+                {
+                    selectItem(event, $selectedOption);
+                    reloadSelectedPosition($list, $selectedOption);
+                }
+
             },
 
             /**
@@ -366,7 +399,7 @@
              */
             clearKeyStrokes = function($selector)
             {
-                $selector.data('matchString', '');
+                $selector.removeData();
                 timer = undefined;
             };
 
