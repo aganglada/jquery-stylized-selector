@@ -420,12 +420,14 @@
             selectCount++;
         });
 
-        $(document).on('click', '.' + settings.styledSelectorClass, toggleOpen);
-        $(document).on('click', closeAll);
-        $(document).on('click', '.' + settings.optionsClass, selectListItem);
-        $(document).on('keydown', selectKeyPress);
-        $(document).on('onOpen', 'select', onDefaultOpen);
-        $(document).on('onChange', 'select', function(event, data)
+        var $_document = $(document);
+
+        $_document.on('click', '.' + settings.styledSelectorClass, toggleOpen);
+        $_document.on('click', closeAll);
+        $_document.on('click', '.' + settings.optionsClass, selectListItem);
+        $_document.on('keydown', selectKeyPress);
+        $_document.on('onOpen', 'select', onDefaultOpen);
+        $_document.on('onChange', 'select', function(event, data)
         {
             settings.onChange.call(this, data.selectedValue);
         });
