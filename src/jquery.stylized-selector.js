@@ -8,10 +8,8 @@
  *
  */
 
-(function ( $ )
-{
-    $.fn.stylizedSelector = function(options)
-    {
+(function ($) {
+    $.fn.stylizedSelector = function(options) {
             // select data-id
         var selectCount = 0,
 
@@ -47,8 +45,7 @@
              * to be used later :)
              * @param $selector
              */
-            updateDataSelector = function($selector)
-            {
+            updateDataSelector = function($selector) {
                 $selector.data({
                     'isMultiple':       $selector.attr('multiple') !== undefined,
                     'styledSelect':     $selector.next('div.' + settings.styledSelectorClass),
@@ -63,8 +60,7 @@
              * @param index
              * @returns {*}
              */
-            dataSelector = function($selector, index)
-            {
+            dataSelector = function($selector, index) {
                 return $selector.data(index);
             },
 
@@ -73,26 +69,23 @@
              * building structure to wrap it.
              * @param $selector
              */
-            buildSelector = function($selector)
-            {
+            buildSelector = function($selector) {
                 var isMultipleClass = dataSelector($selector, 'isMultiple') ? ' ' + settings.isMultipleClass : '';
 
-                $selector.attr('tabindex', -1)
+                $selector
                     .addClass(settings.hiddenClass)
                     .wrap('<div data-id="' + selectCount + '" class="' + settings.wrapperClass + isMultipleClass + '"></div>');
 
 
                 // if is not a multiple select
-                if (!dataSelector($selector, 'isMultiple'))
-                {
+                if (!dataSelector($selector, 'isMultiple')) {
                     $selector.after('<div class="' + settings.styledSelectorClass + '">' +
                         '<span class="' + settings.currentTextClass + '"></span>' +
                         '</div>');
 
                     setSelectedOption($selector);
 
-                    if (settings.arrowIconClass !== false)
-                    {
+                    if (settings.arrowIconClass !== false) {
                         var $styledSelect = $selector.next('div.' + settings.styledSelectorClass);
                         $styledSelect.append('<i class="' + settings.arrowIconClass + '"></i>');
                     }
@@ -104,8 +97,7 @@
              * set initial value.
              * @param $selector
              */
-            setSelectedOption = function($selector)
-            {
+            setSelectedOption = function($selector) {
                 updateDataSelector($selector);
 
                 var $selectedOption = dataSelector($selector, 'optionSelected'),
@@ -119,8 +111,7 @@
              * building options in selector list.
              * @param $selector
              */
-            updateSelect = function($selector)
-            {
+            updateSelect = function($selector) {
                 updateDataSelector($selector);
 
                 var $selectedOption = dataSelector($selector, 'optionSelected'),
@@ -130,8 +121,7 @@
                     'class': settings.optionsClass
                 }).insertAfter($styledSelect ? $styledSelect : $selector);
 
-                for (var i = 0; i < dataSelector($selector, 'optionList').length; i++)
-                {
+                for (var i = 0; i < dataSelector($selector, 'optionList').length; i++) {
                     $('<li />', {
                         text    : $selector.children('option').eq(i).text(),
                         rel     : $selector.children('option').eq(i).val(),
@@ -144,8 +134,7 @@
              * onClick selector.
              * @param event
              */
-            toggleOpen = function(event)
-            {
+            toggleOpen = function(event) {
                 event.stopPropagation();
 
                 var $styledSelect     = $(event.target).closest('.' + settings.styledSelectorClass),
@@ -154,8 +143,7 @@
 
                 closeAll();
 
-                if (!selectorIsOpen)
-                {
+                if (!selectorIsOpen) {
                     $styledSelect.toggleClass(settings.openSelectorClass).next('ul.' + settings.optionsClass).toggle();
                     $('select', $selectorWrapper).trigger('onOpen');
                 }
@@ -164,8 +152,7 @@
             /**
              * triggered on toggleOpen method.
              */
-            closeAll = function()
-            {
+            closeAll = function() {
                 var $styledSelectors = $('.' + settings.styledSelectorClass),
                     $selectorWrapper = $styledSelectors.parent();
 
@@ -177,8 +164,7 @@
              * on optionList click.
              * @param event
              */
-            selectListItem = function(event)
-            {
+            selectListItem = function(event) {
                 selectItem(event, $(event.target).closest('li'));
             },
 
@@ -187,8 +173,7 @@
              * @param event
              * @param $_optionClicked
              */
-            selectItem = function(event, $_optionClicked)
-            {
+            selectItem = function(event, $_optionClicked) {
                 event.stopPropagation();
 
                 var $selectorWrapper  = $_optionClicked.closest('.' + settings.wrapperClass),
@@ -201,8 +186,7 @@
                 $_optionClicked.addClass(settings.activeOptionClass);
                 $selector.val($_optionClicked.attr('rel'));
 
-                if (event.type == 'click')
-                {
+                if (event.type == 'click') {
                     $selectorWrapper.find('.' + settings.styledSelectorClass).removeClass(settings.openSelectorClass);
                     $list.hide();
                     $selector.trigger('onChange', [{
@@ -215,8 +199,7 @@
              * this is what's happen always when a selector is clicked (open).
              * @param event
              */
-            onDefaultOpen = function(event)
-            {
+            onDefaultOpen = function(event) {
                 var target            = event.target,
                     $selectorWrapper  = $(target).parent(),
                     $list             = $selectorWrapper.find('ul'),
@@ -226,13 +209,16 @@
                 settings.onOpen.call(this);
             },
 
+            onDefaultFocus = function() {
+                console.log($(this));
+            },
+
             /**
              * on open we go to the centered position of the selected value.
              * @param $list
              * @param $current
              */
-            reloadSelectedPosition = function($list, $current)
-            {
+            reloadSelectedPosition = function($list, $current) {
                 $list.scrollTop($list.scrollTop() + $current.position().top - $list.height()/2 + $current.height()/2);
             },
 
@@ -240,8 +226,7 @@
              * onKeyPress (if select is open)
              * @param event
              */
-            selectKeyPress = function(event)
-            {
+            selectKeyPress = function(event) {
                 var $currentOpenSelector    = $('.' + settings.styledSelectorClass + '.' + settings.openSelectorClass),
                     $currentWrapperSelector = $currentOpenSelector.parent(),
                     $selector               = $('select', $currentWrapperSelector),
@@ -257,8 +242,7 @@
                     keyboard       = event.keyCode >= 48 && event.keyCode <= 90,
                     numeric        = event.keyCode >= 96 && event.keyCode <= 105;
 
-                if ($currentOpenSelector.length > 0)
-                {
+                if ($currentOpenSelector.length > 0) {
                     event.preventDefault();
                 }
 
@@ -271,48 +255,36 @@
                 if (
                     currentKeyCode == RETURN
                     ||
-                    currentKeyCode == SPACE
-                    ||
                     currentKeyCode == TAB
                     ||
                     currentKeyCode == ESC
-                  )
-                {
+                  ) {
                     $current.trigger('click');
                     return;
-                }
-                else if (currentKeyCode == UP && $currentPrev.length && $currentPrev.is('li'))
-                {
+                } else if (currentKeyCode == UP && $currentPrev.length && $currentPrev.is('li')) {
                     selectItem(event, $currentPrev);
                     reloadSelectedPosition($list, $current);
-                }
-                else if (currentKeyCode == DOWN && $currentNext.length && $currentNext.is('li'))
-                {
+                } else if (currentKeyCode == DOWN && $currentNext.length && $currentNext.is('li')) {
                     selectItem(event, $currentNext);
                     reloadSelectedPosition($list, $current);
-                }
-                else if (currentKeyCode == DELETE)
-                {
+                } else if (currentKeyCode == SPACE) {
+                    $currentOpenSelector.trigger('click');
+                } else if (currentKeyCode == DELETE) {
                     matchString = matchString.slice(0, -1);
                     $selector.data(
                         'matchString',
                         matchString
                     );
-                }
-                else if (keyboard || numeric)
-                {
+                } else if (keyboard || numeric) {
                     currentKeyCode = numeric ? currentKeyCode -48 : currentKeyCode;
 
                     var string = String.fromCharCode(currentKeyCode).toLowerCase();
 
                     // #1
-                    if (string != matchString)
-                    {
+                    if (string != matchString) {
                         matchString = matchString + String.fromCharCode(currentKeyCode).toLowerCase();
                         $selector.data('count', 0);
-                    }
-                    else
-                    {
+                    } else {
                         matchString = string;
                         $selector.data('count', count+1);
                     }
@@ -327,8 +299,7 @@
 
                 timer = $selector.data('timer');
 
-                if (timer !== undefined)
-                {
+                if (timer !== undefined) {
                     clearTimeout(timer);
                 }
 
@@ -343,8 +314,7 @@
             /**
              * 3 sec. to clear out the search data.
              */
-            callClearTimeout = function()
-            {
+            callClearTimeout = function() {
                 var $currentOpenSelector  = $('.' + settings.styledSelectorClass + '.' + settings.openSelectorClass),
                     $selector             = $('select', $currentOpenSelector.parent());
 
@@ -357,8 +327,7 @@
              * @param event
              * @param $currentOpenSelector
              */
-            checkForMatch = function(event, $currentOpenSelector)
-            {
+            checkForMatch = function(event, $currentOpenSelector) {
                 var $openSelectorWrapper = $currentOpenSelector.parent(),
                     $selector            = $('select', $openSelectorWrapper),
                     $list                = $('ul', $openSelectorWrapper),
@@ -367,27 +336,23 @@
                     $selectedOption      = undefined,
                     count                = $selector.data('count');
 
-                $('li', $list).each(function(key, element)
-                {
+                $('li', $list).each(function(key, element) {
                     var text = $(element).text().toLowerCase().trim();
 
-                    if (text.indexOf(matchString) == 0)
-                    {
+                    if (text.indexOf(matchString) == 0) {
                         $selectedOption = $(this);
                         matchesElements.push($selectedOption);
                     }
                 });
 
-                if (count >= matchesElements.length)
-                {
+                if (count >= matchesElements.length) {
                     $selector.data('count', 0);
                     count = 0;
                 }
 
                 $selectedOption = matchesElements[count];
 
-                if ($selectedOption !== undefined)
-                {
+                if ($selectedOption !== undefined) {
                     selectItem(event, $selectedOption);
                     reloadSelectedPosition($list, $selectedOption);
                 }
@@ -398,8 +363,7 @@
              * reset search
              * @param $selector
              */
-            clearKeyStrokes = function($selector)
-            {
+            clearKeyStrokes = function($selector) {
                 $selector.removeData();
                 timer = undefined;
             };
@@ -410,8 +374,7 @@
          * Add a handler to manage the original select
          *
          */
-        this.each(function()
-        {
+        this.each(function() {
             var $selector = $(this);
 
             updateDataSelector($selector);
@@ -421,16 +384,13 @@
         });
 
         var $_document = $(document);
-
         $_document.on('click', '.' + settings.styledSelectorClass, toggleOpen);
         $_document.on('click', closeAll);
         $_document.on('click', '.' + settings.optionsClass, selectListItem);
         $_document.on('keydown', selectKeyPress);
         $_document.on('onOpen', 'select', onDefaultOpen);
-        $_document.on('onChange', 'select', function(event, data)
-        {
-            settings.onChange.call(this, data.selectedValue);
-        });
+        $_document.on('onChange', 'select', function(event, data) { settings.onChange.call(this, data.selectedValue); });
+        $_document.on('focus', 'select', onDefaultFocus);
 
         return this;
     };
